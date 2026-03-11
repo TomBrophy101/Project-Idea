@@ -23,10 +23,25 @@ struct Project_IdeaApp: App {
         }
     }()
 
+    @State private var isUnlocked = false
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if isUnlocked {
+                ContentView()
+            } else {
+
+            }
         }
         .modelContainer(sharedModelContainer)
+    }
+
+    private func tryToUnlock() {
+        BiometricManager.authenticateUser { success in
+            if success {
+                isUnlocked = true
+            } else {
+                print("FaceID Failed or not available")
+            }}
     }
 }

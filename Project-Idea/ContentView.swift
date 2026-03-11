@@ -49,6 +49,9 @@ struct ContentView: View {
             let encryptedPassword = EncryptionManager.hashPassword(inputPassword)
             let newItem = Item(title: inputTitle, serviceType: "Item", secureData: encryptedPassword, timestamp: Date())
             modelContext.insert(newItem)
+
+            inputTitle = ""
+            inputPassword = ""
         }
     }
 
