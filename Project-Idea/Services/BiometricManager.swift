@@ -6,3 +6,7 @@
 //
 import Foundation
 import LocalAuthentication
+
+struct BiometricManager {
+
+}
