@@ -10,7 +10,12 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @Query(sort: \Item.timestamp, order: .reverse) private var items: [Item]
+
+    @State private var inputTitle = ""
+    @State private var inputPassword = ""
+    @State private var current2FACode = "------"
+    @State private var tempEmail = "No Email Generated"
 
     var body: some View {
         NavigationSplitView {
