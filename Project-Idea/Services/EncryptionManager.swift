@@ -14,4 +14,25 @@ struct EncryptionManager {
 
         return hashed.compactMap { String(format: "%02x", $0)}.joined()
     }
+
+    static func encrypt(_ text: String, key: SymmetricKey) -> String? {
+        let data = Data(text.utf8)
+        do {
+            let sealedBox = try AES.GCM.seal(data, using: key)
+            return sealedBox.combined?.base64EncodedString()
+        } catch {
+            return nil
+        }
+    }
+
+    static func decrypt(_ text: String, key: SymmetricKey) -> String? {
+        guard let data = Data(base64Encoded: text) else { return nil }
+        do {
+            let sealedBox = try AES.GCM.SealedBox(combined: data)
+            let decryptedData = try AES.GCM.open(sealedBox, using: key)
+            return String(data: decryptedData, encoding: .utf8)
+        } catch {
+            return nil
+        }
+    }
 }
