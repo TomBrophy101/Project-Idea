@@ -20,34 +20,39 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             List {
-                Section("New Entry") {
+                Section("Add New Password") {
                     TextField("Title", text: $inputTitle)
                     SecureField("Password", text: $inputPassword)
-                    Button("Save to Vault", action: addItem)
-                        .disabled(inputTitle.isEmpty || inputPassword.isEmpty)
+                    Button(action: addItem) {
+                        Text("Save to Vault")
+                            .frame(maxWidth: .infinity)
+                            .bold()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.blue)
+                    .disabled(inputTitle.isEmpty || inputPassword.isEmpty)
                 }
+
                 Section("Saved Items") {
                     ForEach(items) { item in
                         NavigationLink {
-                            Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
+                            Text("Secure Data: \(item.secureData)")
                         } label: {
-                            Text(item.title.isEmpty ? "Untitled" : item.title)
+                            VStack(alignment: .leading) {
+                                Text(item.title)
+                                    .font(.headline)
+                                Text(item.timestamp, style: .date)
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                            }
                         }
                     }
                     .onDelete(perform: deleteItems)
                 }
             }
             .navigationTitle("My Passwords")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-            }
         } detail: {
-            ZStack {
-                Color.blue.opacity(0.1).ignoresSafeArea()
-                Text("Select an item")
-            }
+            Text("Select an item")
         }
         .navigationSplitViewStyle(.balanced)
     }

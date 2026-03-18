@@ -24,6 +24,7 @@ struct Project_IdeaApp: App {
     }()
 
     @State private var isUnlocked = false
+    @State private var showPasswordFallback = false
 
     var body: some Scene {
         WindowGroup {
@@ -39,6 +40,13 @@ struct Project_IdeaApp: App {
                         tryToUnlock()
                     }
                     .buttonStyle(.borderedProminent)
+
+                    if showPasswordFallback {
+                        Button("Enter Master Password") {
+                            isUnlocked = true
+                        }
+                        .padding(.top)
+                    }
                 }
                 .onAppear {
                     tryToUnlock()
@@ -50,10 +58,13 @@ struct Project_IdeaApp: App {
 
     private func tryToUnlock() {
         BiometricManager.authenticateUser { success in
-            if success {
-                isUnlocked = true
-            } else {
-                print("FaceID Failed or not available")
-            }}
+            DispatchQueue.main.async {
+                if success {
+                    isUnlocked = true
+                } else {
+                    showPasswordFallback = true
+                }
+            }
+        }
     }
 }
