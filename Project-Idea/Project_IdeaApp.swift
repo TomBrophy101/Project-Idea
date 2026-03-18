@@ -33,7 +33,7 @@ struct Project_IdeaApp: App {
                 VStack(spacing: 20) {
                     Image(systemName: "lock.shield")
                         .font(.system(size: 60))
-                    Text("Vault Locked")
+                    Text("Program Locked")
 
                     Button("Unlock with FaceID") {
                         tryToUnlock()
