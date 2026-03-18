@@ -36,7 +36,7 @@ struct Project_IdeaApp: App {
                         .font(.system(size: 60))
                     Text("Program Locked")
 
-                    Button("Unlock with FaceID") {
+                    Button("Unlock with Face ID") {
                         tryToUnlock()
                     }
                     .buttonStyle(.borderedProminent)
