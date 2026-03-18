@@ -20,8 +20,8 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             List {
-                Section("Add New Password") {
-                    TextField("Service Title", text: $inputTitle)
+                Section("Add New Account") {
+                    TextField("Web page or app name", text: $inputTitle)
                     SecureField("Password", text: $inputPassword)
                 }
 
@@ -53,7 +53,7 @@ struct ContentView: View {
                     .onDelete(perform: deleteItems)
                 }
             }
-            .navigationTitle("My Passwords")
+            .navigationTitle("Project Idea")
         } detail: {
             Text("Select an item")
         }
