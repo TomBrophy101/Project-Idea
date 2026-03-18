@@ -23,15 +23,16 @@ struct ContentView: View {
                 Section("Add New Password") {
                     TextField("Title", text: $inputTitle)
                     SecureField("Password", text: $inputPassword)
-                    Button(action: addItem) {
-                        Text("Save to Vault")
-                            .frame(maxWidth: .infinity)
-                            .bold()
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.blue)
-                    .disabled(inputTitle.isEmpty || inputPassword.isEmpty)
                 }
+
+                Button(action: addItem) {
+                    Text("Save to Vault")
+                        .frame(maxWidth: .infinity)
+                        .bold()
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.blue)
+                .disabled(inputTitle.isEmpty || inputPassword.isEmpty)
 
                 Section("Saved Items") {
                     ForEach(items) { item in
