@@ -21,17 +21,19 @@ struct ContentView: View {
         NavigationSplitView {
             List {
                 Section("Add New Password") {
-                    TextField("Title", text: $inputTitle)
+                    TextField("Service Title", text: $inputTitle)
                     SecureField("Password", text: $inputPassword)
                 }
 
                 Button(action: addItem) {
                     Text("Save to Vault")
                         .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
                         .bold()
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(.blue)
+                .listRowBackground(Color.clear)
                 .disabled(inputTitle.isEmpty || inputPassword.isEmpty)
 
                 Section("Saved Items") {
