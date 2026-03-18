@@ -29,6 +29,7 @@ struct ContentView: View {
                 }
                 .onDelete(perform: deleteItems)
             }
+            .navigationTitle("My Passwords")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
@@ -40,7 +41,10 @@ struct ContentView: View {
                 }
             }
         } detail: {
-            Text("Select an item")
+            ZStack {
+                Color.blue.opacity(0.1).ignoresSafeArea()
+                Text("Select an item")
+            }
         }
     }
 
