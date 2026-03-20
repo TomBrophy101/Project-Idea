@@ -22,8 +22,8 @@ struct ContentView: View {
             List {
                 Section("Add New Account") {
                     TextField("Web page or app name", text: $inputTitle)
-                    TextField("Email", text: $tempEmail)
-                    SecureField("Password", text: $inputPassword)
+                    TextField("Enter Email", text: $tempEmail)
+                    SecureField("Enter Password", text: $inputPassword)
                 }
 
                 Button(action: addItem) {
