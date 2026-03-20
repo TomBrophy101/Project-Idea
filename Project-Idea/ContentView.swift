@@ -22,6 +22,7 @@ struct ContentView: View {
             List {
                 Section("Add New Account") {
                     TextField("Web page or app name", text: $inputTitle)
+                    SecureField("Email", text: $tempEmail)
                     SecureField("Password", text: $inputPassword)
                 }
 
@@ -54,6 +55,7 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Project Idea")
+            .navigationBarBackButtonHidden()
         } detail: {
             Text("Select an item")
         }
