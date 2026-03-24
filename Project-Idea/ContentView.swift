@@ -23,6 +23,11 @@ struct ContentView: View {
                 Section("Add New Account") {
                     TextField("Web Page or App Name", text: $inputTitle)
                     TextField("Enter Email", text: $tempEmail)
+                        .textContentType(.emailAddress)
+                        .keyboardType(.emailAddress)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+
                     SecureField("Enter Password", text: $inputPassword)
                 }
 
@@ -63,8 +68,17 @@ struct ContentView: View {
 
     private func addItem() {
         withAnimation {
-            let newItem = Item(title: "New Password Entry", serviceType: "Login", secureData: "EncryptedData", timestamp: Date())
+            let newItem = Item(
+                title: "New Password Entry",
+                serviceType: "Login",
+                secureData: "Email: \(tempEmail), Pass: \(inputPassword)",
+                timestamp: Date()
+            )
             modelContext.insert(newItem)
+
+            inputTitle = ""
+            tempEmail = ""
+            inputPassword = ""
         }
     }
 
