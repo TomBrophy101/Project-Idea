@@ -22,6 +22,8 @@ struct ContentView: View {
             List {
                 Section("Add New Account") {
                     TextField("Web Page or App Name", text: $inputTitle)
+                        .textContentType(.organizationName)
+
                     TextField("Enter Email", text: $tempEmail)
                         .textContentType(.emailAddress)
                         .keyboardType(.emailAddress)
@@ -29,6 +31,7 @@ struct ContentView: View {
                         .textInputAutocapitalization(.never)
 
                     SecureField("Enter Password", text: $inputPassword)
+                        .textContentType(.password)
                 }
 
                 Button(action: addItem) {
@@ -45,7 +48,12 @@ struct ContentView: View {
                 Section("Saved Accounts") {
                     ForEach(items) { item in
                         NavigationLink {
-                            Text("Secure Data: \(item.secureData)")
+                            VStack(spacing: 20) {
+                                Text(item.title).font(.largeTitle).bold()
+                                Text(item.secureData).font(.body)
+                                Spacer()
+                            }
+                            .padding()
                         } label: {
                             VStack(alignment: .leading) {
                                 Text(item.title)
@@ -63,13 +71,12 @@ struct ContentView: View {
         } detail: {
             Text("Select an item")
         }
-        .navigationSplitViewStyle(.balanced)
     }
 
     private func addItem() {
         withAnimation {
             let newItem = Item(
-                title: "New Password Entry",
+                title: inputTitle,
                 serviceType: "Login",
                 secureData: "Email: \(tempEmail), Pass: \(inputPassword)",
                 timestamp: Date()
