@@ -82,7 +82,7 @@ struct ContentView: View {
             let newItem = Item(
                 title: inputTitle,
                 serviceType: "Login",
-                secureData: "Email: \(tempEmail) | Password: \(inputPassword)",
+                secureData: "Email: \(tempEmail)\nPassword: \(inputPassword)",
                 timestamp: Date()
             )
             modelContext.insert(newItem)
