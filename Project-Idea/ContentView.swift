@@ -20,6 +20,7 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             List {
+                //This is the bread and butter of the App.
                 Section("Add New Account") {
                     TextField("Web Page or App Name", text: $inputTitle)
                         .textContentType(.organizationName)
