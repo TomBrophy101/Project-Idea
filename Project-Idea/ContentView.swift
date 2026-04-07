@@ -39,6 +39,8 @@ struct ContentView: View {
                         .textContentType(.newPassword)
 
                     SecureField("Enter 2 Factor Code", text: $current2FACode)
+                        .textContentType(.oneTimeCode)
+                        .keyboardType(.numberPad)
                 }
 
                 Button(action: addItem) {
