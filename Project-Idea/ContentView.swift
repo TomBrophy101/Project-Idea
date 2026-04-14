@@ -179,6 +179,7 @@ struct ContentView: View {
 
     private func cleanURLToTitle(_ urlString: String) {
         let lowcased = urlString.lowercased()
+
         var cleaned = lowcased
             .replacingOccurrences(of: "https://", with: "")
             .replacingOccurrences(of: "http://", with: "")
@@ -188,14 +189,17 @@ struct ContentView: View {
             cleaned = String(cleaned[..<firstDot])
         }
 
-        inputTitle = cleaned.capitalized
+        let finalTitle = cleaned
+        if inputTitle != finalTitle {
+            inputTitle = finalTitle
+        }
 
     }
 
     private func generateRandomEmail() {
-        let prefix = ["user", "mail", "vault", "proxy", "hidden", "cheese", "mac", "x2"]
+        let prefix = ["user", "mail", "vault", "proxy", "hidden", "cheese", "mac", "x22", "x23", "x24", "x25", "x26"]
         let randomPrefix = prefix.randomElement() ?? "user"
-        let randomNumber = Int.random(in: 10000...99999)
+        let randomNumber = Int.random(in: 100000...999999)
         let domains = ["icloud.com", "privaterelay.appleid.com", "fastmail.com", "gmail.com", "outlook.com", "student.ncirl.ie"]
 
         tempEmail = "\(randomPrefix)\(randomNumber)@\(domains.randomElement()!)"
