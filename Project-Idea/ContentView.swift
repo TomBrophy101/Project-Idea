@@ -37,7 +37,7 @@ struct ContentView: View {
                         .textInputAutocapitalization(.never)
 
                     SecureField("Enter Password", text: $inputPassword)
-                        .textContentType(.newPassword)
+                        .textContentType(.password)
 
                     HStack {
                         TextField("Enter 2 Factor Code", text: $current2FACode)
