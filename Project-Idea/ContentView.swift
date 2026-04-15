@@ -201,7 +201,7 @@ struct ContentView: View {
         let prefix = ["user", "mail", "vault", "proxy", "hidden", "cheese", "mac", "x22", "x23", "x24", "x25", "x26"]
         let randomPrefix = prefix.randomElement() ?? "user"
         let randomNumber = Int.random(in: 100000...999999)
-        let domains = ["icloud.com", "privaterelay.appleid.com", "fastmail.com", "gmail.com", "outlook.com", "student.ncirl.ie"]
+        let domains = ["icloud.com", "fastmail.com", "gmail.com", "outlook.com", "student.ncirl.ie"]
 
         tempEmail = "\(randomPrefix)\(randomNumber)@\(domains.randomElement()!)"
     }
