@@ -3,7 +3,8 @@
 //  
 //
 //  Created by Tom Brophy on 10/03/2026.
-//
+// This for the authentication of the user to allow them to access their data.
+
 import Foundation
 import LocalAuthentication
 

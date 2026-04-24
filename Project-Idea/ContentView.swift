@@ -3,7 +3,7 @@
 //  Project-Idea
 //
 //  Created by Tom Brophy on 10/03/2026.
-//
+//  This is the main menu of the program.
 
 import SwiftUI
 import SwiftData
@@ -13,10 +13,13 @@ struct ContentView: View {
     @Query(sort: \Item.timestamp, order: .reverse) private var items: [Item]
 
     @State private var inputTitle = ""
+    @State private var tempEmail = ""
     @State private var inputPassword = ""
     @State private var current2FACode = ""
-    @State private var tempEmail = ""
     @State private var expectedCode = ""
+
+    @State private var isEmailVisible = false
+    @State private var isPasswordVisible = false
 
     @FocusState private var isTitleFocused: Bool
     @FocusState private var isEmailFocused: Bool
@@ -28,6 +31,7 @@ struct ContentView: View {
             List {
                 //This is the bread and butter of the App.
                 Section("Add New Account") {
+                    //This is to add a website or an app of the users choosing.
                     TextField("Web Page or App Name", text: $inputTitle)
                         .textContentType(.URL)
                         .keyboardType(.URL)
@@ -46,7 +50,7 @@ struct ContentView: View {
                                 if isTitleFocused {
                                     ScrollView(.horizontal, showsIndicators: false) {
                                         HStack(spacing: 12) {
-                                            ForEach(["Google", "Instagram", "Netflix", "Amazon", "X", "Facebook", "WhatsApp", "Revolut"], id: \.self) { app in
+                                            ForEach(["Google", "Instagram", "Netflix", "Amazon", "X", "Facebook", "WhatsApp", "Revolut", "Tinder"], id: \.self) { app in
                                                 Button(app) {
                                                     inputTitle = app
                                                     isEmailFocused = true
@@ -62,8 +66,9 @@ struct ContentView: View {
                             }
                         }
 
+                    //This is to generate a complicated email for the user.
                     TextField("Enter Email", text: $tempEmail)
-                        .textContentType(.emailAddress)
+                        .textContentType(.username)
                         .keyboardType(.emailAddress)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
@@ -94,9 +99,48 @@ struct ContentView: View {
                             }
                         }
 
-                    SecureField("Enter Password", text: $inputPassword)
-                        .textContentType(.newPassword)
+                    HStack {
+                        if isPasswordVisible {
+                            TextField("Enter Password", text: $inputPassword)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled()
+                                .id("password_visible")
+                        } else {
+                            SecureField("Enter Password", text: $inputPassword)
+                                .id("password_hidden")
+                        }
 
+
+                        Button {
+                            isPasswordVisible.toggle()
+                        } label: {
+                            Image(systemName: isPasswordVisible ? "eye.slash" : "eye")
+                                .id(isPasswordVisible ? "open" : "closed")
+                                .foregroundColor(.gray)
+                                .frame(width: 25)
+                        }
+                        .buttonStyle(.plain)
+
+                        Button {
+                            let newPassword = PasswordGeneratorService.generate()
+
+                            inputPassword = newPassword
+
+                            isPasswordVisible = false
+
+                            UINotificationFeedbackGenerator().notificationOccurred(.success)
+                        } label: {
+                            Image(systemName: "dice.fill")
+                                .foregroundColor(.white)
+                                .padding(8)
+                                .background(Color.blue)
+                                .cornerRadius(8)
+                        }
+                        .buttonStyle(.plain)
+                    }
+
+
+                    //This is to send the 2 factor authentication code to the supposed phone number of the user.
                     HStack {
                         TextField("Enter 2 Factor Code", text: $current2FACode)
                             .keyboardType(.numberPad)
@@ -138,6 +182,7 @@ struct ContentView: View {
                     }
                 }
 
+                //This is to save all the information for the user.
                 Button(action: addItem) {
                     Text("Save to Vault")
                         .frame(maxWidth: .infinity)
@@ -167,6 +212,7 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Project-Idea")
+            .navigationBarTitleDisplayMode(.automatic)
         } detail: {
             Text("Select an item")
         }
@@ -191,6 +237,7 @@ struct ContentView: View {
 
     }
 
+    //This is the elements to make the email for the user.
     private func generateRandomEmail() {
         let prefix = ["user", "mail", "vault", "proxy", "hidden", "cheese", "mac", "x22", "x23", "x24", "x25", "x26"]
         let randomPrefix = prefix.randomElement() ?? "user"
@@ -198,6 +245,8 @@ struct ContentView: View {
         let domains = ["icloud.com", "fastmail.com", "gmail.com", "outlook.com", "student.ncirl.ie"]
 
         tempEmail = "\(randomPrefix)\(randomNumber)@\(domains.randomElement()!)"
+
+        isEmailVisible = false
     }
 
     private func getUniqueSavedEmails() -> [String] {
@@ -256,6 +305,8 @@ struct ContentView: View {
 
     private func resetFields() {
         inputTitle = ""; tempEmail = ""; inputPassword = ""; current2FACode = ""; expectedCode = ""
+        isEmailVisible = false
+        isPasswordVisible = false
         is2FAFocused = false
     }
 

@@ -3,7 +3,8 @@
 //
 //
 //  Created by Tom Brophy on 10/03/2026.
-//
+//  This is to manage the encryption keys of the program.
+
 import Foundation
 import CryptoKit
 

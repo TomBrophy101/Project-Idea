@@ -3,7 +3,7 @@
 //  Project-Idea
 //
 //  Created by Tom Brophy on 01/04/2026.
-//
+//  This is the opening sequence when a user opens the app before going into the lock screen.
 
 import SwiftUI
 

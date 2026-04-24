@@ -3,7 +3,7 @@
 //  Project-Idea
 //
 //  Created by Tom Brophy on 21/04/2026.
-//
+//  This is the screen for the list of saved accounts.
 
 import SwiftUI
 import LocalAuthentication
@@ -19,7 +19,7 @@ struct DetailView: View {
         VStack(spacing: 25) {
             Image(systemName: isUnlocked ? "lock.open.fill" : "lock.fill")
                 .font(.system(size: 60))
-                .foregroundColor(isUnlocked ? .green : .blue)
+                .foregroundColor(isUnlocked ? .green : .red)
                 .padding(.top, 40)
 
             Text(item.title)
@@ -36,6 +36,29 @@ struct DetailView: View {
                             .background(Color.secondary.opacity(0.1))
                             .cornerRadius(12)
                             .textSelection(.enabled)
+
+                        Button(action: {
+                            if let dataToCopy = decryptedData, !dataToCopy.isEmpty {
+
+                                UIPasteboard.general.string = ""
+
+                                UIPasteboard.general.string = dataToCopy
+
+                                let generator = UINotificationFeedbackGenerator()
+                                generator.prepare()
+                                generator.notificationOccurred(.success)
+
+                                print("Successfully copied: \(dataToCopy)")
+                            } else {
+                                print("Copy failed: decryptedData is empty or nil")
+                            }
+                        }) {
+                            Label("Copy to Clipboard", systemImage: "doc.on.doc.fill")
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.blue)
                     }
                 }
                 .padding()
@@ -55,22 +78,22 @@ struct DetailView: View {
         .padding()
         .navigationTitle("Account Details")
         .navigationBarTitleDisplayMode(.inline)
+        //.onAppear {
+        //    if !isUnlocked {
+        //        authenticate()
+        //    }
+        //}
     }
 
     func authenticate() {
-        let context = LAContext()
-        var error: NSError?
-
-        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "Access your secure vault") { success, authenticationError in
+        BiometricManager.authenticateUser { success in
+            DispatchQueue.main.async {
                 if success {
                     decrypt()
                 } else {
-                    print("Authentication failed")
+                    self.showingError = true
                 }
             }
-        } else {
-            decrypt()
         }
     }
 

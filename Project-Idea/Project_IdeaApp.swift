@@ -3,7 +3,7 @@
 //  Project-Idea
 //
 //  Created by Tom Brophy on 10/03/2026.
-//
+//  This is the lock screen of the program.
 
 import SwiftUI
 import SwiftData
@@ -52,11 +52,11 @@ struct Project_IdeaApp: App {
                         .padding(.top)
                     }
                 }
-                .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        tryToUnlock()
-                    }
-                }
+                //.onAppear {
+                //    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                //        tryToUnlock()
+                //    }
+                //}
             } else {
                 ContentView()
                     .transition(.move(edge: .bottom))
