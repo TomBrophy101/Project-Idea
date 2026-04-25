@@ -23,6 +23,7 @@ struct ContentView: View {
 
     @FocusState private var isTitleFocused: Bool
     @FocusState private var isEmailFocused: Bool
+    @FocusState private var isPasswordFocused: Bool
     @FocusState private var is2FAFocused: Bool
 
 
@@ -68,8 +69,9 @@ struct ContentView: View {
 
                     //This is to generate a complicated email for the user.
                     TextField("Enter Email", text: $tempEmail)
-                        .textContentType(.username)
+                        .textContentType(.emailAddress)
                         .keyboardType(.emailAddress)
+                        .accessibilityIdentifier("EmailField")
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
                         .focused($isEmailFocused)
@@ -99,17 +101,27 @@ struct ContentView: View {
                             }
                         }
 
-                    HStack {
-                        if isPasswordVisible {
-                            TextField("Enter Password", text: $inputPassword)
-                                .textInputAutocapitalization(.never)
-                                .autocorrectionDisabled()
-                                .id("password_visible")
-                        } else {
-                            SecureField("Enter Password", text: $inputPassword)
-                                .id("password_hidden")
+                    //This is to create a complicated password for the user.
+                    HStack(spacing: 10) {
+                        ZStack(alignment: .leading) {
+                            if isPasswordVisible {
+                                TextField("Enter Password", text: $inputPassword)
+                                    .textContentType(.newPassword)
+                                    .textInputAutocapitalization(.never)
+                                    .autocorrectionDisabled()
+                                    .focused($isPasswordFocused)
+                            } else {
+                                SecureField("Enter Password", text: $inputPassword)
+                                    .textContentType(.newPassword)
+                                    .focused($isPasswordFocused)
+                            }
                         }
-
+                        .transaction { transaction in
+                            transaction.animation = nil
+                        }
+                        .onChange(of: isPasswordVisible) {
+                            isPasswordFocused = true
+                        }
 
                         Button {
                             isPasswordVisible.toggle()
@@ -117,17 +129,12 @@ struct ContentView: View {
                             Image(systemName: isPasswordVisible ? "eye.slash" : "eye")
                                 .id(isPasswordVisible ? "open" : "closed")
                                 .foregroundColor(.gray)
-                                .frame(width: 25)
+                                .frame(width: 30, height: 30)
                         }
                         .buttonStyle(.plain)
 
                         Button {
-                            let newPassword = PasswordGeneratorService.generate()
-
-                            inputPassword = newPassword
-
-                            isPasswordVisible = false
-
+                            inputPassword = PasswordGeneratorService.generate()
                             UINotificationFeedbackGenerator().notificationOccurred(.success)
                         } label: {
                             Image(systemName: "dice.fill")
@@ -171,7 +178,6 @@ struct ContentView: View {
                                     }
                                 }
                             }
-
 
                         Button("Send Code") {
                             sendFakeSMS()
