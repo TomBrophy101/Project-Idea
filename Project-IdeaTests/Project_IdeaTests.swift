@@ -40,8 +40,8 @@ struct Project_IdeaTests {
     }
 
     @Test func testPasswordStrength() async throws {
-        let length = 20
-        let password = PasswordGeneratorService.generate(length: 20)
+        let length = 32
+        let password = PasswordGeneratorService.generate(length: length)
 
         #expect(password.count == length)
 
