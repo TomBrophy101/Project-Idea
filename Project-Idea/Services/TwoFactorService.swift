@@ -20,8 +20,8 @@ struct TwoFactorService {
     }
 
     static func validate(_ input: String, against expected: String) -> Bool {
-        let cleanInput = input.replacingOccurrences(of: "", with: "")
-        let cleanExpected = expected.replacingOccurrences(of: "", with: "")
+        let cleanInput = input.replacingOccurrences(of: " ", with: "")
+        let cleanExpected = expected.replacingOccurrences(of: " ", with: "")
         return cleanInput == cleanExpected && !cleanInput.isEmpty
     }
 }
