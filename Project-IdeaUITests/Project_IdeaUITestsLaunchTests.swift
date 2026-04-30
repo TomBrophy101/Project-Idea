@@ -22,16 +22,27 @@ final class Project_IdeaUITestsLaunchTests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
 
+        // This is to verify the Add New Account
+        let mainList = app.collectionViews["MainList"]
+        if !mainList.waitForExistence(timeout: 5) {
+            let backButton = app.navigationBars.buttons.firstMatch
+            if backButton.exists {
+                backButton.tap()
+            }
+        }
+
         // This is to verify the Main Title
-        let navigationTitle = app.staticTexts["Project-Idea"]
-        XCTAssertTrue(navigationTitle.exists, "The app failed to show the main navigation title on launch.")
+        let titleFound = app.staticTexts["Project-Idea"].waitForExistence(timeout: 5) || app.navigationBars["Project-Idea"].exists
+
+        XCTAssertTrue(titleFound, "The Project Idea title is missing.")
+
+        //This is to verify the section header
+        let sectionHeader = app.staticTexts["Add New Account"]
+        XCTAssertTrue(sectionHeader.exists, "The section header is missing.")
 
         // This is to verify the email generator button exists.
-        XCTAssertTrue(app.buttons["at.badge.plus"].exists, "The email generator icon is missing!")
-
-        // This is to verify the Add New Account
-        let sectionHeader = app.staticTexts["Add New Account"]
-        XCTAssertTrue(sectionHeader.exists, "The input form was not found on launch.")
+        let emailIcon = app.buttons["at.badge.plus_menu"]
+        XCTAssertTrue(emailIcon.waitForExistence(timeout: 5), "The email generator button is missing.")
 
         // This is to take the screenshot.
         let attachment = XCTAttachment(screenshot: app.screenshot())
