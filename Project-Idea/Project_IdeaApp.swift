@@ -10,6 +10,9 @@ import SwiftData
 
 @main
 struct Project_IdeaApp: App {
+    @Environment(\.scenePhase) private var scenePhase
+    
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
@@ -29,37 +32,51 @@ struct Project_IdeaApp: App {
 
     var body: some Scene {
         WindowGroup {
-            if !hasFinishedSplash {
-                SplashView(isFinished: $hasFinishedSplash)
-            } else  if !isUnlocked {
-                VStack(spacing: 20) {
-                    Image(systemName: "lock.shield")
-                        .font(.system(size: 60))
-                        .foregroundColor(.blue)
 
-                    Text("Program Locked")
-                        .font(.headline)
+            let isUITesting = ProcessInfo.processInfo.arguments.contains("-uitesting")
+            Group {
+                if !hasFinishedSplash && !isUITesting {
+                    SplashView(isFinished: $hasFinishedSplash)
+                } else  if !isUnlocked && !isUITesting {
+                    VStack(spacing: 20) {
+                        Image(systemName: "lock.shield")
+                            .font(.system(size: 60))
+                            .foregroundColor(.blue)
 
-                    Button("Unlock with Face ID") {
-                        tryToUnlock()
-                    }
-                    .buttonStyle(.borderedProminent)
+                        Text("Program Locked")
+                            .font(.headline)
 
-                    if showPasswordFallback {
-                        Button("Enter Master Password") {
-                            withAnimation { isUnlocked = true }
+                        Button("Unlock with Face ID") {
+                            tryToUnlock()
                         }
-                        .padding(.top)
+                        .buttonStyle(.borderedProminent)
+
+                        if showPasswordFallback {
+                            Button("Enter Master Password") {
+                                withAnimation { isUnlocked = true }
+                            }
+                            .padding(.top)
+                        }
                     }
-                }
-                //.onAppear {
-                //    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                //        tryToUnlock()
-                //    }
-                //}
-            } else {
-                ContentView()
+                    // .onAppear {
+                    //    if !isUnlocked {
+                    //        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    //            tryToUnlock()
+                    //        }
+                    //    }
+                    //}
+                } else {
+                    ContentView(onLock: {
+                        if !isUITesting { withAnimation { isUnlocked = false } }
+                    })
                     .transition(.move(edge: .bottom))
+                }
+            }
+            .onChange(of: scenePhase) { _, newPhase in
+                if newPhase == .background {
+                    isUnlocked = false
+                    showPasswordFallback = false
+                }
             }
         }
         .modelContainer(sharedModelContainer)
